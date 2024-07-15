@@ -1,0 +1,111 @@
+
+// Liquid code
+{{ 'collection-menu.css' | asset_url | stylesheet_tag }}
+  <h2>{{ section.settings.section_title }}</h2>
+<div class="custom-circle-section" style="background-color: {{ section.settings.background_color }}">
+  {% for block in section.blocks %}
+    {% assign collection = collections[block.settings.collection] %}
+    {% if collection and collection.products.size > 0 %}
+      {% for product in collection.products %}
+        <div class="circle-content">
+          <a href="{{ collection.url }}">
+            <img src="{{ collection.featured_image | img_url: 'medium' }}" alt="{{ collection.title }}" style="border-color: {{ block.settings.circle_border_color }};">
+          </a>
+          <h3>{{ collection.title }}</h3>
+        </div>  
+      {% endfor %}
+    {% endif %}
+  {% endfor %}
+</div>
+
+{/* slick slider code */}
+<script>
+$('.custom-circle-section').slick({
+  infinite: true,
+  autoplay: true,
+  autoplaySpeed: 400,
+  infinite: true,
+  slidesToShow: 7,
+  slidesToScroll: 1,
+  responsive: [
+    {
+      breakpoint: 1024,
+      settings: {
+        slidesToShow: 5,
+        slidesToScroll: 2,
+        infinite: true,
+      }
+    },
+    {
+      breakpoint: 768,
+      settings: {
+        slidesToShow: 5,
+        slidesToScroll: 2
+      }
+    },
+    {
+      breakpoint: 480,
+      settings: {
+        slidesToShow: 4,
+        slidesToScroll: 1
+      }
+    }
+  ]
+});
+</script>
+
+{/* scheam */}
+{% schema %}
+{
+  "name": "Collection Menu",
+  "settings": [
+    {
+      "type": "text",
+      "label": "Section Title",
+      "id": "section_title",
+      "default": "Featured Products"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#f0f0f0"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "featured_collection",
+      "name": "Featured Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "color",
+          "id": "circle_border_color",
+          "label": "Circle Border Color",
+          "default": "#000000"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Default",
+      "blocks": [
+        {
+          "type": "featured_collection"
+        },
+        {
+          "type": "featured_collection"
+        },
+        {
+          "type": "featured_collection"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
